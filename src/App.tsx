@@ -82,8 +82,8 @@ function Header({ home }: { home: boolean }) {
     <div className="header-inner">
       <RouteLink href="/" className="brand" onClick={close}><AtomMark /><span>Atoms</span><span className="brand-divider" /><span className="brand-sub">Careers</span></RouteLink>
       <nav className={mobileOpen ? 'main-nav is-open' : 'main-nav'} aria-label="主导航">
-        <a href={home ? '#product' : siteHref('/#product')} onClick={close}>我们在做什么</a>
-        <a href={home ? '#work' : siteHref('/#work')} onClick={close}>Vibe Coder</a>
+        <a href={home ? '#product' : siteHref('/#product')} onClick={close}>为什么 Atoms</a>
+        <a href={home ? '#work' : siteHref('/#work')} onClick={close}>工作方式</a>
         <a href={home ? '#process' : siteHref('/#process')} onClick={close}>招聘流程</a>
         <a href={home ? '#faq' : siteHref('/#faq')} onClick={close}>常见问题</a>
         <a href="https://atoms.dev/zh/dashboard" target="_blank" rel="noreferrer" onClick={close}>探索 Atoms <Icon name="arrow-up" size={14} /></a>
@@ -153,7 +153,7 @@ function Footer() {
   return <footer className="site-footer section-shell"><div><RouteLink href="/" className="brand"><AtomMark /><span>Atoms</span></RouteLink><p>Make something that matters.</p></div><div className="footer-right"><a href="https://atoms.dev/zh/dashboard" target="_blank" rel="noreferrer">访问 Atoms <Icon name="arrow-up" size={15} /></a><span>{jobsPresentation.isMock ? '招聘页面前端预览 · 示例内容' : '岗位来源：飞书招聘；其他内容仍在完善'}</span></div></footer>
 }
 
-function ApplicationModal({ job, onClose, jobs }: { job: Job | null; onClose: () => void; jobs: Job[] }) {
+function ApplicationModal({ job, onClose, jobs, loading, error, onRetry }: { job: Job | null; onClose: () => void; jobs: Job[]; loading: boolean; error: boolean; onRetry: () => void }) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [selectedId, setSelectedId] = useState(job?.id || '')
   const selectedJob = jobs.find((item) => item.id === selectedId)
@@ -168,10 +168,10 @@ function ApplicationModal({ job, onClose, jobs }: { job: Job | null; onClose: ()
   const realApplyUrl = selectedJob?.applyUrl && /^https:\/\//.test(selectedJob.applyUrl) ? selectedJob.applyUrl : undefined
   return <dialog className="application-dialog" ref={dialogRef} onCancel={onClose} onClick={(event) => { if (event.target === event.currentTarget) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose() } }} aria-labelledby="apply-title">
     <button className="icon-button modal-close" onClick={onClose} aria-label="关闭投递入口"><Icon name="close" /></button>
-    <img className="dialog-mascot" src={mascots.explorer} alt="" /><p className="eyebrow">LET’S BUILD SOMETHING.</p><h2 id="apply-title">从一个作品，认识你。</h2><p className="dialog-description">选择你感兴趣的方向，准备好能代表你的作品。</p>
-    <label className="dialog-label">感兴趣的岗位<select value={selectedId} onChange={(event) => setSelectedId(event.target.value)}><option value="">请选择一个岗位</option>{jobs.map((item) => <option key={item.id} value={item.id}>{item.title}{jobsPresentation.isMock ? '（示例）' : ''}</option>)}</select></label>
+    <img className="dialog-mascot" src={mascots.explorer} alt="" /><p className="eyebrow">LET’S BUILD SOMETHING.</p><h2 id="apply-title">从一个作品，认识你。</h2><p className="dialog-description">选择你感兴趣的岗位，查看对应的投递信息。</p>
+    <label className="dialog-label">感兴趣的岗位<select value={selectedId} disabled={loading || error || !jobs.length} onChange={(event) => setSelectedId(event.target.value)}><option value="">{loading ? '正在加载岗位…' : error ? '岗位暂时无法加载' : jobs.length ? '请选择一个岗位' : '暂无开放岗位'}</option>{jobs.map((item) => <option key={item.id} value={item.id}>{item.title}{jobsPresentation.isMock ? '（示例）' : ''}</option>)}</select></label>
     <div className="application-checklist"><h3>你可以提前准备</h3><p><Icon name="check" size={17} /> 一份简历，或关于你的简短介绍</p><p><Icon name="check" size={17} /> 一个可体验的作品 / Demo / GitHub 链接</p><p><Icon name="check" size={17} /> 你的判断、AI 的参与，以及如何验证结果</p></div>
-    {realApplyUrl ? <a className="button button-dark dialog-action" href={realApplyUrl} target="_blank" rel="noreferrer">{jobsPresentation.isMock ? '前往正式投递' : '前往飞书投递'} <Icon name="arrow-up" size={18} /></a> : <div className="demo-application" role="status"><span className="sample-tag">{jobsPresentation.isMock ? '演示入口' : selectedJob ? '投递链接待补充' : '选择岗位'}</span><p>{selectedJob ? `已选择「${selectedJob.title}」${jobsPresentation.isMock ? '示例' : ''}岗位。` : jobsPresentation.isMock ? '正式投递通道尚未开放。' : '请选择岗位，查看对应的投递信息。'}<br />{jobsPresentation.isMock || selectedJob ? `${jobsPresentation.defaultApplyNote}；` : ''}此处不会收集或发送个人信息。</p></div>}
+    {loading ? <div className="demo-application" role="status"><p>正在加载岗位，请稍候…</p></div> : error ? <div className="demo-application" role="alert"><p>岗位暂时无法加载，请重试。</p><button type="button" className="text-link dialog-back" onClick={onRetry}>重新加载岗位</button></div> : !jobs.length ? <div className="demo-application" role="status"><p>暂无开放岗位，欢迎稍后再来看看。</p></div> : realApplyUrl ? <a className="button button-dark dialog-action" href={realApplyUrl} target="_blank" rel="noreferrer">{jobsPresentation.isMock ? '前往正式投递' : '前往飞书投递'} <Icon name="arrow-up" size={18} /></a> : <div className="demo-application" role="status"><span className="sample-tag">{jobsPresentation.isMock ? '演示入口' : selectedJob ? '投递链接待补充' : '选择岗位'}</span><p>{selectedJob ? `已选择「${selectedJob.title}」${jobsPresentation.isMock ? '示例' : ''}岗位。` : jobsPresentation.isMock ? '正式投递通道尚未开放。' : '请选择岗位，查看对应的投递信息。'}<br />{jobsPresentation.isMock || selectedJob ? `${jobsPresentation.defaultApplyNote}；` : ''}此处不会收集或发送个人信息。</p></div>}
     <button className="text-link dialog-back" onClick={onClose}>返回继续了解 <Icon name="arrow" size={16} /></button>
   </dialog>
 }
@@ -210,7 +210,7 @@ export default function App() {
     if (window.location.hash && !loading) requestAnimationFrame(() => document.getElementById(window.location.hash.slice(1))?.scrollIntoView())
   }, [job, path, loading])
   return <div className="careers-site"><a className="skip-link" href="#main-content">跳到主要内容</a><Header home={home} />
-    {home ? <main id="main-content"><RecruitHero /><ProductSection /><WorkSection /><JobsSection query={search} jobs={jobs} loading={loading} error={error} reload={() => setAttempt(attempt + 1)} /><ProcessSection onApply={() => setApplication({ job: null })} /><FaqSection onApply={() => setApplication({ job: null })} /></main> : jobId && loading ? <main id="main-content" className="route-state section-shell"><StatePanel type="loading" /></main> : jobId && error ? <main id="main-content" className="route-state section-shell"><StatePanel type="error" onRetry={() => setAttempt(attempt + 1)} /></main> : job ? <div id="main-content"><JobDetail job={job} onApply={() => setApplication({ job })} /></div> : <main id="main-content" className="not-found section-shell"><p className="eyebrow">LOOKING FOR SOMETHING?</p><h1>这个岗位暂时不在这里。</h1><p>岗位可能已关闭，或链接有误。去看看其他方向吧。</p><RouteLink className="button button-dark" href="/#jobs">返回岗位列表 <Icon name="arrow" size={18} /></RouteLink></main>}
-    <Footer />{application && <ApplicationModal jobs={jobs} job={application.job} onClose={() => setApplication(null)} />}
+    {home ? <main id="main-content"><RecruitHero onApply={() => setApplication({ job: null })} /><ProductSection jobs={jobs} /><WorkSection /><JobsSection query={search} jobs={jobs} loading={loading} error={error} reload={() => setAttempt(attempt + 1)} /><ProcessSection onApply={() => setApplication({ job: null })} /><FaqSection onApply={() => setApplication({ job: null })} /></main> : jobId && loading ? <main id="main-content" className="route-state section-shell"><StatePanel type="loading" /></main> : jobId && error ? <main id="main-content" className="route-state section-shell"><StatePanel type="error" onRetry={() => setAttempt(attempt + 1)} /></main> : job ? <div id="main-content"><JobDetail job={job} onApply={() => setApplication({ job })} /></div> : <main id="main-content" className="not-found section-shell"><p className="eyebrow">LOOKING FOR SOMETHING?</p><h1>这个岗位暂时不在这里。</h1><p>岗位可能已关闭，或链接有误。去看看其他方向吧。</p><RouteLink className="button button-dark" href="/#jobs">返回岗位列表 <Icon name="arrow" size={18} /></RouteLink></main>}
+    <Footer />{application && <ApplicationModal jobs={jobs} job={application.job} loading={loading} error={error} onRetry={() => setAttempt(attempt + 1)} onClose={() => setApplication(null)} />}
   </div>
 }

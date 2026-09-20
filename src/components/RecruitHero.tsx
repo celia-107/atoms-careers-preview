@@ -1,15 +1,20 @@
 import { useState } from 'react'
+import { careerStory } from '../data/careerStory'
 import { heroCharacters, characterStyle, mascots } from '../data/mascots'
 
-export function RecruitHero() {
+export function RecruitHero({ onApply }: { onApply: () => void }) {
   const [paused, setPaused] = useState(false)
+  const content = careerStory.hero
   return <section className={`recruit-hero section-shell${paused ? ' motion-paused' : ''}`} aria-labelledby="hero-title">
     <div className="recruit-hero-copy">
-      <p className="eyebrow"><span className="status-dot" /> HELLO, VIBE CODERS.</p>
-      <h1 id="hero-title">好想法，<br /><span>一起做出来。</span></h1>
-      <p className="recruit-intro">和 AI 一起，把灵感变成可用的产品。<br />带着好奇心，也带着你的作品。</p>
-      <div className="recruit-actions"><a href="#jobs" className="button button-dark">查看岗位 <span aria-hidden="true">↗</span></a><a href="#product" className="recruit-secondary">先认识我们 <span aria-hidden="true">↓</span></a></div>
-      <p className="recruit-byline">HUMAN IMAGINATION. AI POSSIBILITY.</p>
+      <p className="eyebrow"><span className="status-dot" /> {content.eyebrow}</p>
+      <h1 id="hero-title">{content.title}<br /><span>{content.titleAccent}</span></h1>
+      <div className="recruit-intro">
+        <p className="recruit-product">{content.product}</p>
+        <p className="recruit-invitation">{content.invitation}</p>
+      </div>
+      <div className="recruit-actions"><a href="#jobs" className="button button-dark">{content.jobsAction} <span aria-hidden="true">↗</span></a><button type="button" onClick={onApply} className="recruit-secondary">{content.applyAction} <span aria-hidden="true">↗</span></button></div>
+      <p className="recruit-byline">{content.byline}</p>
     </div>
     <div className="mascot-ensemble" aria-label="七位蛋仔伙伴一起迎接新的创造者">
       <div className="ensemble-orbit" /><div className="ensemble-stage" />

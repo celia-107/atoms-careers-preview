@@ -21,11 +21,15 @@
 .recruit-hero h1 { font-size: clamp(46px, 5vw, 68px); font-weight: 600; letter-spacing: -2.8px; line-height: 1.37; margin: 31px 0 34px; }
 .recruit-hero h1 span { color: #9380a7; position: relative; white-space: nowrap; }
 .recruit-hero h1 span::after { content: ''; position: absolute; left: 0; right: -7px; height: 10px; bottom: -11px; border-top: 2px solid #cdbed9; border-radius: 50%; transform: rotate(-1deg); }
-.recruit-intro { font-size: 16px; line-height: 1.9; color: #817a86; }
+.recruit-intro { max-width: 450px; font-size: 16px; line-height: 1.9; color: #817a86; }
+.recruit-product { color: #645b6c; }
+.recruit-invitation { margin-top: 11px; font-size: .875em; }
 .recruit-actions { display: flex; align-items: center; gap: 28px; margin-top: 31px; }
 .recruit-actions .button { min-height: 52px; min-width: 167px; font-size: 14px; }
 .recruit-actions .button span { font-size: 24px; line-height: 1; font-weight: 400; }
-.recruit-secondary { color: #8b7c94; display: inline-flex; align-items: center; gap: 15px; font-size: 12px; }
+.recruit-secondary { color: #8b7c94; display: inline-flex; align-items: center; justify-content: center; gap: 15px; font-size: 12px; min-height: 48px; padding: 0 5px; border: 0; border-radius: 999px; background: transparent; white-space: nowrap; }
+.recruit-secondary:hover { color: #675273; }
+.recruit-secondary:hover span { background: #ece5f0; border-color: #cbbad7; }
 .recruit-secondary span { border: 1px solid #e0d9e6; width: 27px; height: 27px; border-radius: 50%; display: grid; place-items: center; }
 .recruit-byline { color: #aca0b5; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .75px; margin-top: 28px; }
 .mascot-ensemble { position: relative; aspect-ratio: 1.2; width: 100%; min-width: 0; margin-top: -15px; }
@@ -137,7 +141,8 @@
   .recruit-hero-copy { text-align: center; padding: 10px 0 0; }
   .recruit-hero-copy .eyebrow { justify-content: center; font-size: 9px; gap: 10px; }
   .recruit-hero h1 { font-size: 46px; letter-spacing: -2px; line-height: 1.37; margin: 23px 0 30px; }
-  .recruit-intro { font-size: 13px; line-height: 1.85; }
+  .recruit-intro { max-width: 350px; margin-inline: auto; font-size: 14px; line-height: 1.85; }
+  .recruit-invitation { margin-top: 10px; font-size: 12px; }
   .recruit-actions { gap: 22px; justify-content: center; margin-top: 25px; }
   .recruit-actions .button { min-height: 46px; min-width: 146px; font-size: 12px; }
   .recruit-secondary { font-size: 11px; gap: 10px; }
@@ -220,15 +225,6 @@
 .careers-site .pf-process-aside h3 { margin-top: 14px; }
 .careers-site .pf-contact-button { background: #f9f7f4; font-size: 11px; }
 .careers-site .pf-faq-categories button:focus-visible, .careers-site .pf-faq-question:focus-visible { outline: 2px solid #b395c7; outline-offset: 3px; }
-.careers-site .pw-demo-topline, .careers-site .pw-work-topline { font-size: 10px; }
-.careers-site .pw-demo-status, .careers-site .pw-product-kicker, .careers-site .pw-product-note, .careers-site .pw-demo-result { font-size: 10px; }
-.careers-site .pw-step-label small, .careers-site .pw-work-detail, .careers-site .pw-boundary li span { font-size: 11px; }
-.careers-site .pw-preview-eyebrow { font-size: 8px; }
-.careers-site .pw-preview-bar, .careers-site .pw-activity-tags span, .careers-site .pw-task-item small { font-size: 9px; }
-.careers-site .pw-activity-copy>p, .careers-site .pw-task-heading p, .careers-site .pw-task-footer, .careers-site .pw-task-footer button, .careers-site .pw-preview-feedback { font-size: 11px; }
-.careers-site .pw-preview-cta { min-height: 38px; font-size: 11px; }
-.careers-site .pw-task-item b { font-size: 12px; }
-@media(max-width:760px) { .careers-site .pw-work-topline { align-items: flex-start; } }
 .detail-mobile-apply { display: none; }
 @media(max-width:760px) {
   .careers-site .detail-mobile-apply { display: inline-flex; margin-top: 21px; min-height: 44px; font-size: 12px; gap: 28px; }
