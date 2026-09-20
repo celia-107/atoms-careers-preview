@@ -160,7 +160,7 @@ export function WorkSection() {
           </div>
 
           <article className="pw-work-panel" id={`work-panel-${active.id}`} role="tabpanel" aria-labelledby={`work-tab-${active.id}`}>
-            <div className="pw-work-panel-head"><span>{active.label}</span><span>{active.number} / 04</span></div>
+            <div className="pw-work-panel-head"><span>{active.label}</span><span>{active.number} / {String(content.steps.length).padStart(2, '0')}</span></div>
             <div className="pw-work-panel-body">
               <div>
                 <h3>{active.title}</h3>
@@ -169,13 +169,10 @@ export function WorkSection() {
               </div>
               <div className="pw-work-mascot" aria-hidden="true"><div className="pw-mascot-halo" /><img src={active.mascot} alt="" /></div>
             </div>
-            <div className="pw-work-line"><span /><span /><span /><span /></div>
+            <div className="pw-work-line" aria-hidden="true">{content.steps.map((step, index) => <span key={step.id} className={index === activeIndex ? 'is-active' : undefined} />)}</div>
           </article>
         </div>
-        <div className="pw-boundary">
-          <div><Spark /><h3>{content.boundaryTitle}</h3></div>
-          <ul>{content.traits.map((trait) => <li key={trait.title}><b>{trait.title}</b><span>{trait.description}</span></li>)}</ul>
-        </div>
+        <div className="pw-vibe-closing"><Spark /><p>{content.closing}</p></div>
       </div>
     </section>
   )

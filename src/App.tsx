@@ -83,7 +83,7 @@ function Header({ home }: { home: boolean }) {
       <RouteLink href="/" className="brand" onClick={close}><AtomMark /><span>Atoms</span><span className="brand-divider" /><span className="brand-sub">Careers</span></RouteLink>
       <nav className={mobileOpen ? 'main-nav is-open' : 'main-nav'} aria-label="主导航">
         <a href={home ? '#product' : siteHref('/#product')} onClick={close}>我们在做什么</a>
-        <a href={home ? '#work' : siteHref('/#work')} onClick={close}>如何工作</a>
+        <a href={home ? '#work' : siteHref('/#work')} onClick={close}>Vibe Coder</a>
         <a href={home ? '#process' : siteHref('/#process')} onClick={close}>招聘流程</a>
         <a href={home ? '#faq' : siteHref('/#faq')} onClick={close}>常见问题</a>
         <a href="https://atoms.dev/zh/dashboard" target="_blank" rel="noreferrer" onClick={close}>探索 Atoms <Icon name="arrow-up" size={14} /></a>
