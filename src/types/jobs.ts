@@ -15,7 +15,7 @@ export type Job = {
   requirements: string[]
   preferredQualifications?: string[]
   interviewProcess?: string[]
-  /** 仅填写已核验的公开投递链接；未配置时由页面显示投递尚未开放。 */
+  /** 仅填写已核验的 HTTPS 公开投递链接；未配置时由页面提示链接待补充。 */
   applyUrl?: string
   status: JobStatus
 }

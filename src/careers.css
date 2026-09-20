@@ -197,6 +197,15 @@
 .careers-site .filter-fields { flex-shrink: 0; }
 .careers-site .search-field { width: 156px; }
 .careers-site .jobs-summary { flex-wrap: wrap; }
+/* Keep live job titles and longer descriptions readable without expanding cards unevenly. */
+.careers-site .mascot-job-card { min-width: 0; display: flex; flex-direction: column; }
+.careers-site .job-card h3, .careers-site .detail-hero h1 { overflow-wrap: anywhere; }
+.careers-site .job-summary { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.careers-site .job-card .job-meta { margin-top: auto; padding-top: 22px; }
+.careers-site .job-meta svg { flex-shrink: 0; }
+.careers-site .detail-hero > div:first-child, .careers-site .detail-content { min-width: 0; }
+.careers-site .detail-hero > div > p, .careers-site .detail-mission > p:not(.eyebrow), .careers-site .detail-section li { overflow-wrap: anywhere; white-space: pre-line; }
+@media(min-width:761px) { .careers-site .filter-tabs { flex-wrap: wrap; } }
 @media(max-width:760px) {
   .careers-site .filter-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; width: 100%; }
   .careers-site .search-field { width: 100%; grid-column: 1 / -1; min-height: 43px; }

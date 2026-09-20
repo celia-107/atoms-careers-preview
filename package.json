@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:jobs": "node --test scripts/feishu/*.test.ts",
+    "jobs:import": "node scripts/feishu/importActiveJobs.ts"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",

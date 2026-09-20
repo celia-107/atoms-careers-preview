@@ -2,6 +2,8 @@
 
 import { MOCK_JOBS } from '../data/mockJobs'
 import type { Job } from '../types/jobs'
+import { siteHref } from '../routing'
+import { parseJobsDocument } from './jobsContract'
 
 type MockState = 'success' | 'loading' | 'empty' | 'error'
 
@@ -18,12 +20,20 @@ export type JobsPresentation = Readonly<{
   defaultApplyNote: string
 }>
 
-export const jobsPresentation: JobsPresentation = {
+const isMock = import.meta.env.VITE_JOBS_SOURCE !== 'feishu'
+
+export const jobsPresentation: JobsPresentation = isMock ? {
   isMock: true,
   listNote: '以下岗位、地点与流程均为演示内容，非真实招聘信息。',
   itemLabel: '示例岗位',
   detailNote: '以上职责、要求与面试流程均为示例，正式内容以招聘团队确认为准。',
   defaultApplyNote: '当前为演示投递入口',
+} : {
+  isMock: false,
+  listNote: '岗位来源：飞书招聘，展示当前同步的招聘中岗位',
+  itemLabel: '',
+  detailNote: '岗位信息来自飞书招聘，具体面试安排以招聘团队沟通为准。',
+  defaultApplyNote: '该岗位的公开投递链接待补充',
 }
 
 function getMockState(): MockState {
@@ -54,6 +64,8 @@ function copyJob(job: Job): Job {
  * 飞书密钥及请求认证必须留在服务端，不得添加到前端环境变量中。
  */
 export async function getJobs(): Promise<Job[]> {
+  if (!isMock) return getPublishedJobs()
+
   const state = getMockState()
 
   if (state === 'loading') {
@@ -72,4 +84,24 @@ export async function getJobs(): Promise<Job[]> {
 
   // 每次返回独立对象，避免调用方修改内容后污染下一次读取。
   return MOCK_JOBS.filter((job) => job.status === 'open').map(copyJob)
+}
+
+async function getPublishedJobs(): Promise<Job[]> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 10_000)
+  try {
+    const response = await fetch(siteHref('/data/jobs.json'), {
+      signal: controller.signal,
+      cache: 'no-store',
+      headers: { Accept: 'application/json' },
+    })
+    if (!response.ok) throw new Error('岗位数据请求失败')
+    const document = parseJobsDocument(await response.json())
+    return document.jobs.filter(job => job.status === 'open')
+  } catch {
+    // A broken real source must never silently show mock positions as live jobs.
+    throw new Error('岗位暂时加载失败，请稍后重试。')
+  } finally {
+    clearTimeout(timeout)
+  }
 }
