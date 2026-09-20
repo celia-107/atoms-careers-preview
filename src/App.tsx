@@ -30,8 +30,8 @@ function Icon({ name, size = 20, className = '' }: { name: IconName; size?: numb
   return <svg aria-hidden="true" className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{paths[name]}</svg>
 }
 
-function AtomMark() {
-  return <span className="atom-mark" aria-hidden="true"><i /><i /><i /></span>
+function AtomsLogo() {
+  return <img className="atoms-logo" src={siteHref('/brand/atoms-logo.svg')} width="166" height="48" alt="Atoms" />
 }
 
 function readLocation() {
@@ -80,7 +80,7 @@ function Header({ home }: { home: boolean }) {
   const close = () => setMobileOpen(false)
   return <header className="site-header">
     <div className="header-inner">
-      <RouteLink href="/" className="brand" onClick={close}><AtomMark /><span>Atoms</span><span className="brand-divider" /><span className="brand-sub">Careers</span></RouteLink>
+      <RouteLink href="/" className="brand" onClick={close}><AtomsLogo /><span className="brand-divider" /><span className="brand-sub">Careers</span></RouteLink>
       <nav className={mobileOpen ? 'main-nav is-open' : 'main-nav'} aria-label="主导航">
         <a href={home ? '#product' : siteHref('/#product')} onClick={close}>为什么 Atoms</a>
         <a href={home ? '#work' : siteHref('/#work')} onClick={close}>工作方式</a>
@@ -150,7 +150,7 @@ function JobsSection({ jobs, loading, error, reload, query }: { jobs: Job[]; loa
 }
 
 function Footer() {
-  return <footer className="site-footer section-shell"><div><RouteLink href="/" className="brand"><AtomMark /><span>Atoms</span></RouteLink><p>Make something that matters.</p></div><div className="footer-right"><a href="https://atoms.dev/zh/dashboard" target="_blank" rel="noreferrer">访问 Atoms <Icon name="arrow-up" size={15} /></a><span>{jobsPresentation.isMock ? '招聘页面前端预览 · 示例内容' : '岗位来源：飞书招聘；其他内容仍在完善'}</span></div></footer>
+  return <footer className="site-footer section-shell"><div><RouteLink href="/" className="brand"><AtomsLogo /></RouteLink><p>Make something that matters.</p></div><div className="footer-right"><a href="https://atoms.dev/zh/dashboard" target="_blank" rel="noreferrer">访问 Atoms <Icon name="arrow-up" size={15} /></a><span>{jobsPresentation.isMock ? '招聘页面前端预览 · 示例内容' : '岗位来源：飞书招聘；其他内容仍在完善'}</span></div></footer>
 }
 
 function ApplicationModal({ job, onClose, jobs, loading, error, onRetry }: { job: Job | null; onClose: () => void; jobs: Job[]; loading: boolean; error: boolean; onRetry: () => void }) {
